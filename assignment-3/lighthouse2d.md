@@ -530,3 +530,37 @@ plt.show()
 +++ {"editable": true, "slideshow": {"slide_type": ""}}
 
 Perform same calculations as in the previous problem, but use all the flash positions.
+
+```{code-cell} ipython3
+log_p_array_all = log_p_many(x_lh_grid, h_grid, flash_x)
+log_posterior_all = log_p_array_all + log_prior_array
+log_posterior_all -= logsumexp(log_posterior_all)
+
+map_idx_all = np.unravel_index(np.argmax(log_posterior_all), log_posterior_all.shape)
+print(f"Joint MAP (all flashes): x_lh = {x_lhs[map_idx_all[1]]}, h = {hs[map_idx_all[0]]}")
+
+log_marg_x_all = logsumexp(log_posterior_all, axis=0)
+log_marg_h_all = logsumexp(log_posterior_all, axis=1)
+
+print(f"Marginal MAP x_lh: {x_lhs[np.argmax(log_marg_x_all)]}")
+print(f"Marginal MAP h: {hs[np.argmax(log_marg_h_all)]}")
+
+levels = 20
+max_log_posterior_all = log_posterior_all.max()
+cs = plt.contourf(x_lhs, hs, log_posterior_all - max_log_posterior_all, levels=levels)
+plt.contour(x_lhs, hs, log_posterior_all - max_log_posterior_all, colors='black', linewidths=0.5, levels=levels)
+plt.colorbar(cs)
+plt.xlabel('x_lh')
+plt.ylabel('h')
+plt.show()
+
+plt.plot(x_lhs, np.exp(log_marg_x_all))
+plt.xlabel('x_lh')
+plt.ylabel('Marginal Probability')
+plt.show()
+
+plt.plot(hs, np.exp(log_marg_h_all))
+plt.xlabel('h')
+plt.ylabel('Marginal Probability')
+plt.show()
+```
