@@ -124,8 +124,10 @@ editable: true
 slideshow:
   slide_type: ''
 ---
-x_min = -20; x_max=20;
-h_min = 1.0; h_max= 10;
+x_min = -150
+x_max = -50
+h_min = 1.0
+h_max = 50
 ```
 
 +++ {"editable": true, "slideshow": {"slide_type": ""}}
