@@ -125,6 +125,18 @@ plt.show()
 
 Repeat the same for binomial distribution with $n=45$.
 
+```{code-cell} ipython3
+with pm.Model() as model_bin45:
+    p_45 = pm.Beta('p_45', alpha=1, beta=1)
+    y_45 = pm.Binomial('y_45', n=45, p=p_45, observed=data)
+    trace_bin45 = pm.sample(draws=draws, tune=tune, return_inferencedata=True)
+    pm.sample_posterior_predictive(trace_bin45, extend_inferencedata=True)
+
+az.plot_ppc(trace_bin45)
+plt.title('PPC: Binomial n=45')
+plt.show()
+```
+
 +++ {"editable": true, "slideshow": {"slide_type": ""}}
 
 ### Problem 3
