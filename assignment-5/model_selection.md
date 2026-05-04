@@ -153,6 +153,18 @@ $$p(k)=e^{-\lambda}\frac{\lambda^k}{k!}$$
 
  Use $\Gamma$ distribution for prior on the $\lambda$ parameter of the distribution.
 
+```{code-cell} ipython3
+with pm.Model() as model_pois:
+    lam = pm.Gamma('lam', alpha=1, beta=0.1)
+    y_pois = pm.Poisson('y_pois', mu=lam, observed=data)
+    trace_pois = pm.sample(draws=draws, tune=tune, return_inferencedata=True)
+    pm.sample_posterior_predictive(trace_pois, extend_inferencedata=True)
+
+az.plot_ppc(trace_pois)
+plt.title('PPC: Poisson')
+plt.show()
+```
+
 +++ {"editable": true, "slideshow": {"slide_type": ""}}
 
 ### Problem 4
