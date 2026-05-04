@@ -110,6 +110,9 @@ with pm.Model() as model_bin35:
     p_35 = pm.Beta('p_35', alpha=1, beta=1)
     y_35 = pm.Binomial('y_35', n=35, p=p_35, observed=data)
     trace_bin35 = pm.sample(draws=draws, tune=tune, return_inferencedata=True)
+    
+    pm.compute_log_likelihood(trace_bin35)
+    
     pm.sample_posterior_predictive(trace_bin35, extend_inferencedata=True)
 
 az.plot_ppc(trace_bin35)
@@ -130,6 +133,9 @@ with pm.Model() as model_bin45:
     p_45 = pm.Beta('p_45', alpha=1, beta=1)
     y_45 = pm.Binomial('y_45', n=45, p=p_45, observed=data)
     trace_bin45 = pm.sample(draws=draws, tune=tune, return_inferencedata=True)
+    
+    pm.compute_log_likelihood(trace_bin45)
+    
     pm.sample_posterior_predictive(trace_bin45, extend_inferencedata=True)
 
 az.plot_ppc(trace_bin45)
@@ -158,6 +164,9 @@ with pm.Model() as model_pois:
     lam = pm.Gamma('lam', alpha=1, beta=0.1)
     y_pois = pm.Poisson('y_pois', mu=lam, observed=data)
     trace_pois = pm.sample(draws=draws, tune=tune, return_inferencedata=True)
+    
+    pm.compute_log_likelihood(trace_pois)
+    
     pm.sample_posterior_predictive(trace_pois, extend_inferencedata=True)
 
 az.plot_ppc(trace_pois)
@@ -183,5 +192,16 @@ editable: true
 slideshow:
   slide_type: ''
 ---
+comp_dict = {
+    'Binomial n=35': trace_bin35,
+    'Binomial n=45': trace_bin45,
+    'Poisson': trace_pois
+}
 
+comp = az.compare(comp_dict, ic='loo')
+print(comp)
+
+az.plot_compare(comp)
+plt.title('Leave-One-Out Cross-Validation Comparison')
+plt.show()
 ```
